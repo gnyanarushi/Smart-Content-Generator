@@ -1,0 +1,31 @@
+{
+  "name": "smart-content-creation",
+  "version": "1.0.0",
+  "description": "A smart content generation app that uses AI to create content",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "nodemon src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [
+    "ai",
+    "content",
+    "generation",
+    "openai",
+    "express"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.21.2",
+    "mongoose": "^8.0.0",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

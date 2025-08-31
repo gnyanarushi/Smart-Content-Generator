@@ -1,0 +1,50 @@
+@startuml Data Flow Diagram
+skinparam backgroundColor white
+skinparam handwritten false
+skinparam defaultFontName Arial
+skinparam sequence {
+    ArrowColor #2c3e50
+    ActorBorderColor #2c3e50
+    LifeLineBorderColor #2c3e50
+    ParticipantBorderColor #2c3e50
+}
+
+actor User
+participant "Frontend\n(React)" as Frontend
+participant "Backend API\n(Express)" as API
+participant "Content\nController" as Controller
+participant "AI Service" as AIService
+database "MongoDB" as DB
+participant "Google Gemini" as Gemini
+
+== Content Generation Flow ==
+User -> Frontend: Enter topic and content type
+Frontend -> API: POST /api/content/generate
+note right: {topic, type, userId}
+API -> Controller: handleRequest()
+Controller -> AIService: generateContent(prompt)
+AIService -> Gemini: Create generative request
+Gemini --> AIService: Return generated content
+AIService -> DB: save content
+note right: {topic, type, content, userId, timestamp}
+DB --> AIService: return saved document
+AIService --> Controller: return content object
+Controller --> API: JSON response
+API --> Frontend: Content data
+Frontend --> User: Display generated content
+
+== Content Retrieval Flows ==
+User -> Frontend: Request content list
+Frontend -> API: GET /api/content
+API -> DB: find({userId})
+DB --> API: return content array
+API --> Frontend: JSON response
+Frontend --> User: Display content list
+
+User -> Frontend: Select specific content
+Frontend -> API: GET /api/content/:id
+API -> DB: findById(id)
+DB --> API: return content
+API --> Frontend: JSON response
+Frontend --> User: Display content details
+@enduml

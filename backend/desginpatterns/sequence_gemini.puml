@@ -1,0 +1,102 @@
+@startuml Sequence Diagram
+skinparam backgroundColor white
+skinparam handwritten false
+skinparam defaultFontName Arial
+skinparam sequence {
+    ArrowColor #2c3e50
+    ActorBorderColor #2c3e50
+    LifeLineBorderColor #2c3e50
+    ParticipantBorderColor #2c3e50
+    ParticipantBackgroundColor white
+    NoteBackgroundColor #f8f9fa
+    NoteBorderColor #dee2e6
+}
+
+actor User
+participant "React Frontend\n(Vite + TypeScript)" as Frontend
+participant "Express Backend" as API
+participant "Content Controller" as Controller
+participant "AI Client" as AI
+participant "MongoDB Atlas" as DB
+participant "Gemini API" as Gemini
+
+== Content Generation Process ==
+User -> Frontend: Input content requirements
+note right: Topic, type selection
+activate Frontend
+
+Frontend -> API: POST /api/content/generate
+activate API
+note right: {topic, type, userId}
+
+API -> Controller: handleContentGeneration()
+activate Controller
+
+Controller -> AI: generateContent(prompt)
+activate AI
+note right: AI Service handles:\n1. Prompt engineering\n2. Context management\n3. Response formatting\n4. Error handling
+
+AI -> Gemini: generateContent()
+activate Gemini
+note right: Gemini model features:\n1. Multi-modal input\n2. More context windows\n3. Structured output\n4. Safety checks
+Gemini --> AI: Generated response
+deactivate Gemini
+
+AI -> AI: processResponse()
+note right: Post-processing:\n1. Format validation\n2. Content filtering\n3. Quality checks
+
+AI -> DB: insertContent()
+activate DB
+note right: {topic, type, content,\nuserId, timestamp}
+DB --> AI: Saved document
+deactivate DB
+
+AI --> Controller: Content object
+deactivate AI
+
+Controller --> API: JSON response
+deactivate Controller
+
+API --> Frontend: Generated content data
+deactivate API
+
+Frontend --> User: Display generated content
+deactivate Frontend
+
+== Content Management ==
+User -> Frontend: View content history
+activate Frontend
+
+Frontend -> API: GET /api/content
+activate API
+
+API -> DB: find({userId})
+activate DB
+DB --> API: Content array
+deactivate DB
+
+API --> Frontend: JSON response
+deactivate API
+
+Frontend --> User: Display content list
+deactivate Frontend
+
+== Content Details ==
+User -> Frontend: Select content item
+activate Frontend
+
+Frontend -> API: GET /api/content/:id
+activate API
+
+API -> DB: findById(id)
+activate DB
+DB --> API: Content document
+deactivate DB
+
+API --> Frontend: Content details
+deactivate API
+
+Frontend --> User: Show content details
+deactivate Frontend
+
+@enduml
