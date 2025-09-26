@@ -13,6 +13,7 @@ import { ImageGenerator } from "./pages/ImageGenerator";
 import { ContentList } from "./pages/ContentList";
 import { ContentDetail } from "./pages/ContentDetail";
 import { Favorites } from "./pages/Favorites";
+import ApiTest from "./components/ApiTest";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,8 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          {/* Temporary API Test Component - Remove in production */}
+          {import.meta.env.DEV && <ApiTest />}
         </BrowserRouter>
       </TooltipProvider>
     </SearchHistoryProvider>
