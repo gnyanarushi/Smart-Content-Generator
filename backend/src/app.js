@@ -8,7 +8,12 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:8080", // Frontend URL
+    origin: [
+      "http://localhost:3000", // Local development (Vite default)
+      "http://localhost:8080", // Local development (alternative)
+      "http://localhost:5173", // Local development (Vite dev server)
+      "https://smart-content-generator.vercel.app", // Production frontend URL
+    ],
     credentials: true,
   })
 );
@@ -20,7 +25,7 @@ app.use("/api/content", contentRoutes);
 // Basic error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong!"});
+  res.status(500).json({ message: "Something went wrong!" });
 });
 
 module.exports = app;
